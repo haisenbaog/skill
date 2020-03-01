@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5b103b1f-bdac-485b-b550-5369e5433fa5" name="Default Changelist" comment="" />
+    <list default="true" id="5b103b1f-bdac-485b-b550-5369e5433fa5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +81,7 @@
       <workItem from="1582925358913" duration="175000" />
       <workItem from="1582925568822" duration="54000" />
       <workItem from="1582925628851" duration="34000" />
+      <workItem from="1582925669052" duration="669000" />
     </task>
     <task id="LOCAL-00001" summary="delete skill/skill">
       <created>1582925504184</created>
