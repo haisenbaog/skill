@@ -32,7 +32,7 @@ class KafkaProducerTests {
 
     @Test
     void consumerRecord() throws InterruptedException {
-        testConsumer.registerConsumer();
+//        testConsumer.registerConsumer();
         TimeUnit.HOURS.sleep(1);
     }
 }

@@ -3,6 +3,7 @@ package top.kispower.skill.kafka2.consumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Collections;
 
@@ -17,6 +18,7 @@ public class TestConsumer {
     @Resource
     private KafkaConsumerRegister kafkaConsumerRegister;
 
+    @PostConstruct
     public void registerConsumer() {
         kafkaConsumerRegister.registerConsumer("testGroup", Collections.singletonList("test3"), 2, record -> {
             log.info("TestConsumer received message: record={}", record);
