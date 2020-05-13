@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author haisenbao
@@ -19,13 +20,27 @@ import java.util.concurrent.Executors;
 @Component
 public class KafkaConsumerRegister {
 
+    @Resource
+    private KafkaConsumerConfig kafkaConsumerConfig;
+
     /**
      * 线程池 TODO：手动创建(数量，名称)
      */
     private ExecutorService executorService = Executors.newFixedThreadPool(100);
 
-    @Resource
-    private KafkaConsumerConfig kafkaConsumerConfig;
+    ThreadFactory threadFactory = new ThreadFactory() {
+        private String groupId;
+        private List<String> topicList;
+        int consumerThreadNum;
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread();
+            thread.setName(String.format("KafkaConsumerThread-%s-%s-%d", groupId, topicList.toString(), consumerThreadNum));
+
+            return null;
+        }
+    };
 
     /**
      * 注册消费者
