@@ -21,7 +21,4 @@ public class KafkaConsumerConfig {
 
     private String enableAutoCommit;
 
-
-
-    private String groupId;
 }

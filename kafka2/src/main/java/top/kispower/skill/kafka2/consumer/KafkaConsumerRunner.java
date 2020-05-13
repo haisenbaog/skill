@@ -7,10 +7,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -26,7 +23,7 @@ public class KafkaConsumerRunner implements Runnable {
     private final KafkaConsumer kafkaConsumer;
 
     /**
-     * 消费的topic
+     * 订阅的topic
      */
     private final List<String> topicList;
 
@@ -41,6 +38,11 @@ public class KafkaConsumerRunner implements Runnable {
     private final RecordHandler recordHandler;
 
     /**
+     * 当前偏移量
+     */
+    private Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
+
+    /**
      * 提交位移
      */
     private CommitPolicy commitPolicy = new CommitPolicy();
@@ -50,23 +52,42 @@ public class KafkaConsumerRunner implements Runnable {
      */
     private OffsetCommitCallback offsetCommitCallback = new CallbackPolicy();
 
+    /**
+     * 再均衡监听器
+     */
+    private ConsumerRebalanceListener consumerRebalanceListener;
+
     public KafkaConsumerRunner(Properties properties, List<String> topicList, RecordHandler recordHandler) {
         this.kafkaConsumer = new KafkaConsumer(properties);
         this.topicList = topicList;
         this.recordHandler = recordHandler;
+        this.consumerRebalanceListener = new RebalancePolicy(kafkaConsumer);
     }
 
+    /**
+     * run方法（TODO: 异常处理）
+     *
+     * @author haisenbao
+     * @date 2020/5/13
+     */
     @Override
     public void run() {
         try {
             // 订阅topic
-            kafkaConsumer.subscribe(topicList);
+            kafkaConsumer.subscribe(topicList, consumerRebalanceListener);
+
             while (!closed.get()) {
+
                 // 拉取消息
                 ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(10000));
+
                 for (ConsumerRecord<String, String> record : records) {
                     // 业务处理
-                    recordHandler.hand(record);
+                    recordHandler.handRecord(record);
+
+                    // 保存偏移量
+                    saveCurrentOffset(record);
+
                     // 提交偏移量
                     commitPolicy.commit(kafkaConsumer, record);
                 }
@@ -81,6 +102,13 @@ public class KafkaConsumerRunner implements Runnable {
     }
 
     /**
+     * 保存偏移量
+     */
+    private void saveCurrentOffset(ConsumerRecord<String, String> record) {
+        currentOffsets.put(new TopicPartition(record.topic(), record.partition()), new OffsetAndMetadata(record.offset()));
+    }
+
+    /**
      * 停止消费
      */
     public void stopConsumer() {
@@ -88,14 +116,28 @@ public class KafkaConsumerRunner implements Runnable {
     }
 
     /**
-     * 业务处理
+     * 业务处理（TODO：消息补偿）
      *
      * @author haisenbao
      * @date 2020/5/13
      */
     public interface RecordHandler {
-        // 补偿
-        void hand(ConsumerRecord<String, String> record);
+
+        /**
+         * 包装层
+         */
+        default void handRecord(ConsumerRecord<String, String> record) {
+            try {
+                process(record);
+            } catch (Exception e) {
+                log.error("top.kispower.skill.kafka2.consumer.KafkaConsumerRunner.RecordHandler.process failed, record={}", record, e);
+            }
+        }
+
+        /**
+         * 消息的处理逻辑(需业务方实现)
+         */
+        void process(ConsumerRecord<String, String> record);
     }
 
     /**
@@ -107,13 +149,12 @@ public class KafkaConsumerRunner implements Runnable {
     @Data
     private class CommitPolicy {
         private static final int BATCH_SIZE = 5;
-        private Map<TopicPartition, OffsetAndMetadata> offsetMap = new HashMap<>();
         private int consumerCount = 0;
 
         void commit(Consumer consumer, ConsumerRecord<String, String> record) {
-            offsetMap.put(new TopicPartition(record.topic(), record.partition()), new OffsetAndMetadata(record.offset()));
+            currentOffsets.put(new TopicPartition(record.topic(), record.partition()), new OffsetAndMetadata(record.offset()));
             if (++consumerCount % BATCH_SIZE == 0) {
-                consumer.commitAsync(offsetMap, offsetCommitCallback);
+                consumer.commitAsync(currentOffsets, offsetCommitCallback);
             }
         }
 
@@ -134,6 +175,33 @@ public class KafkaConsumerRunner implements Runnable {
             } else {
                 log.error("commitAsync failed: offsets={}", offsets, exception);
             }
+        }
+    }
+
+    /**
+     * 消费者再均衡处理策略
+     *
+     * @author haisenbao
+     * @date 2020/5/13
+     */
+    private class RebalancePolicy implements ConsumerRebalanceListener {
+
+        private Consumer consumer;
+
+        RebalancePolicy(Consumer consumer) {
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+            log.info("onPartitionsRevoked...currentOffsets={}", currentOffsets);
+            this.consumer.commitAsync(currentOffsets, offsetCommitCallback);
+            currentOffsets.clear();
+        }
+
+        @Override
+        public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+
         }
     }
 }

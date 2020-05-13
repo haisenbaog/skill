@@ -1,13 +1,15 @@
 kafka:
   producer:
-    bootstrap-servers: 101.132.110.204:9092
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrapServers: 101.132.110.204:9092
+    keySerializer: org.apache.kafka.common.serialization.StringSerializer
+    valueSerializer: org.apache.kafka.common.serialization.StringSerializer
     acks: all
   consumer:
-    bootstrap-servers: 101.132.110.204:9092
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    enable-auto-commit: false
-    group-id: test
+    bootstrapServers: 101.132.110.204:9092
+    keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+    valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+    enableAutoCommit: false
+    groupId: testGroup
+    topicTest: test
+    topicTestConsumerThreadNum: 3
 
