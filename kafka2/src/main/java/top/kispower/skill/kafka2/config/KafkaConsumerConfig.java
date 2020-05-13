@@ -1,4 +1,4 @@
-package top.kispower.skill.kafka2.demo.config;
+package top.kispower.skill.kafka2.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,6 +20,8 @@ public class KafkaConsumerConfig {
     private String valueDeserializer;
 
     private String enableAutoCommit;
+
+
 
     private String groupId;
 }

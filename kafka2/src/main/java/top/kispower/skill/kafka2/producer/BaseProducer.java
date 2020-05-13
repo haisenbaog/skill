@@ -1,4 +1,4 @@
-package top.kispower.skill.kafka2.demo.producer;
+package top.kispower.skill.kafka2.producer;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -74,10 +74,6 @@ public class BaseProducer {
         private Producer<String, String> producer;
         private ProducerRecord<String, String> record;
 
-        CallbackPolicy() {
-
-        }
-
         CallbackPolicy(Producer<String, String> producer, ProducerRecord<String, String> record) {
             this.producer = producer;
             this.record = record;
@@ -90,9 +86,6 @@ public class BaseProducer {
      * @date  2020/5/12
      */
     public class LogCallbackPolicy extends CallbackPolicy {
-
-        public LogCallbackPolicy () {
-        }
 
         public LogCallbackPolicy (Producer<String, String> producer, ProducerRecord<String, String> record) {
             super(producer, record);
@@ -114,9 +107,6 @@ public class BaseProducer {
      * @date  2020/5/12
      */
     public class ResendCallbackPolicy extends CallbackPolicy {
-
-        public ResendCallbackPolicy () {
-        }
 
         public ResendCallbackPolicy (Producer<String, String> producer, ProducerRecord<String, String> record) {
             super(producer, record);

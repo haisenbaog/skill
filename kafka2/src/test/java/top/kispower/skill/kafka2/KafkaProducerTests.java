@@ -3,7 +3,7 @@ package top.kispower.skill.kafka2;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.kispower.skill.kafka2.demo.producer.BaseProducer;
+import top.kispower.skill.kafka2.producer.BaseProducer;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;

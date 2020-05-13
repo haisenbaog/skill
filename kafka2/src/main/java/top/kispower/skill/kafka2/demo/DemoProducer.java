@@ -1,4 +1,4 @@
-package top.kispower.skill.kafka2.demo.producer;
+package top.kispower.skill.kafka2.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.*;
