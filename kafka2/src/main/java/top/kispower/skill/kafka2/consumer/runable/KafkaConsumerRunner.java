@@ -83,7 +83,12 @@ public class KafkaConsumerRunner implements Runnable {
 
                 for (ConsumerRecord<String, String> record : records) {
                     // 业务处理
-                    recordHandler.handRecord(record);
+                    boolean success = recordHandler.handRecord(record);
+
+                    // TODO：消息补偿
+                    if (!success) {
+
+                    }
 
                     // 保存偏移量
                     saveCurrentOffset(record);
@@ -116,7 +121,7 @@ public class KafkaConsumerRunner implements Runnable {
     }
 
     /**
-     * 业务处理（TODO：消息补偿）
+     * 业务处理
      *
      * @author haisenbao
      * @date 2020/5/13
@@ -126,18 +131,19 @@ public class KafkaConsumerRunner implements Runnable {
         /**
          * 包装层
          */
-        default void handRecord(ConsumerRecord<String, String> record) {
+        default boolean handRecord(ConsumerRecord<String, String> record) {
             try {
-                process(record);
+                return process(record);
             } catch (Exception e) {
                 log.error("top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner.RecordHandler.process failed, record={}", record, e);
+                return true;
             }
         }
 
         /**
          * 消息的处理逻辑(需业务方实现)
          */
-        void process(ConsumerRecord<String, String> record);
+        boolean process(ConsumerRecord<String, String> record);
     }
 
     /**

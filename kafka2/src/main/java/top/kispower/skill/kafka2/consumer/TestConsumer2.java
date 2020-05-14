@@ -16,8 +16,9 @@ import top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner;
 public class TestConsumer2 implements KafkaConsumerRunner.RecordHandler{
 
     @Override
-    public void process(ConsumerRecord<String, String> record) {
+    public boolean process(ConsumerRecord<String, String> record) {
         log.info("{}", record);
+        return true;
     }
 
 
