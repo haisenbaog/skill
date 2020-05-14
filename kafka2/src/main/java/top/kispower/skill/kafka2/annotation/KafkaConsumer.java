@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
  * @author haisenbao
  * @date 2020/5/13
  */
-@Component
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface KafkaConsumer {

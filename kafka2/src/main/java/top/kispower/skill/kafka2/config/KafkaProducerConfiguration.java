@@ -3,6 +3,7 @@ package top.kispower.skill.kafka2.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,10 +24,10 @@ public class KafkaProducerConfiguration {
     @Bean
     public Producer<String, String> getProducer() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", kafkaProducerConfig.getBootstrapServers());
-        props.put("acks", kafkaProducerConfig.getAcks());
-        props.put("key.serializer", kafkaProducerConfig.getKeySerializer());
-        props.put("value.serializer", kafkaProducerConfig.getValueSerializer());
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProducerConfig.getBootstrapServers());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProducerConfig.getKeySerializer());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProducerConfig.getValueSerializer());
+        props.put(ProducerConfig.ACKS_CONFIG, kafkaProducerConfig.getAcks());
         log.info("KafkaProducer building... properties={}", props);
         return new KafkaProducer<>(props);
     }

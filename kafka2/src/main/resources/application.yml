@@ -9,7 +9,7 @@ kafka:
     keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
     valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
     enableAutoCommit: false
-    groupId: testGroup
-    topicTest: test
-    topicTestConsumerThreadNum: 3
+    groupId: group3
+    testTopic: test3
+    testTopicConsumerThreadNum: 3
 
