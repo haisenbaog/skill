@@ -50,7 +50,7 @@ public class KafkaConsumerRunner implements Runnable {
     /**
      * 提交结果回调
      */
-    private OffsetCommitCallback offsetCommitCallback = new CallbackPolicy();
+    private OffsetCommitCallback offsetCommitCallback = new DefaultOffsetCommitCallback();
 
     /**
      * 再均衡监听器
@@ -61,7 +61,7 @@ public class KafkaConsumerRunner implements Runnable {
         this.kafkaConsumer = new KafkaConsumer(properties);
         this.topicList = topicList;
         this.recordHandler = recordHandler;
-        this.consumerRebalanceListener = new RebalancePolicy(kafkaConsumer);
+        this.consumerRebalanceListener = new CommitOffsetRebalanceListener(kafkaConsumer);
     }
 
     /**
@@ -85,8 +85,9 @@ public class KafkaConsumerRunner implements Runnable {
                     // 业务处理
                     boolean success = recordHandler.handRecord(record);
 
-                    // TODO：消息补偿
+                    // TD：消息补偿
                     if (!success) {
+                        log.warn("KafkaConsumerRunner.RecordHandler.handRecord failed, message will be resend");
 
                     }
 
@@ -154,16 +155,15 @@ public class KafkaConsumerRunner implements Runnable {
      */
     @Data
     private class CommitPolicy {
-        private static final int BATCH_SIZE = 5;
+
         private int consumerCount = 0;
+        private static final int BATCH_SIZE = 5;
 
         void commit(Consumer consumer, ConsumerRecord<String, String> record) {
-            currentOffsets.put(new TopicPartition(record.topic(), record.partition()), new OffsetAndMetadata(record.offset()));
             if (++consumerCount % BATCH_SIZE == 0) {
                 consumer.commitAsync(currentOffsets, offsetCommitCallback);
             }
         }
-
     }
 
     /**
@@ -173,7 +173,7 @@ public class KafkaConsumerRunner implements Runnable {
      * @date 2020/5/13
      */
     @Data
-    private class CallbackPolicy implements OffsetCommitCallback {
+    private class DefaultOffsetCommitCallback implements OffsetCommitCallback {
         @Override
         public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
             if (exception == null) {
@@ -185,16 +185,16 @@ public class KafkaConsumerRunner implements Runnable {
     }
 
     /**
-     * 消费者再均衡处理策略
+     * 消费者再均衡监听器
      *
      * @author haisenbao
      * @date 2020/5/13
      */
-    private class RebalancePolicy implements ConsumerRebalanceListener {
+    private class CommitOffsetRebalanceListener implements ConsumerRebalanceListener {
 
         private Consumer consumer;
 
-        RebalancePolicy(Consumer consumer) {
+        CommitOffsetRebalanceListener(Consumer consumer) {
             this.consumer = consumer;
         }
 
