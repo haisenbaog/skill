@@ -75,7 +75,7 @@ public class KafkaConsumerRegisterListener implements ApplicationContextAware, A
 
         for (int i = 0; i < consumerThreadNum; i++) {
             KafkaConsumerRunner consumerRunner = new KafkaConsumerRunner(props, topicList, recordHandler);
-            String threadName = String.format("KafkaConsumerThread-%s-%s-%d", groupId, topicList.toString(), consumerThreadNum);
+            String threadName = String.format("KafkaConsumerThread-%s-%s-%d", groupId, topicList.toString(), i);
             new Thread(consumerRunner, threadName).start();
         }
     }

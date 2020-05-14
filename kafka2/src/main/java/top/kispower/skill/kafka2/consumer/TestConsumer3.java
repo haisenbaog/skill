@@ -11,8 +11,8 @@ import top.kispower.skill.kafka2.annotation.KafkaConsumer;
  */
 @Slf4j
 @Component
-@KafkaConsumer(groupId = "group2", topicList = {"test2"}, consumerThreadNum = 2)
-public class TestConsumer2 implements KafkaConsumerRunner.RecordHandler{
+@KafkaConsumer(groupId = "group3", topicList = {"test3"}, consumerThreadNum = 2)
+public class TestConsumer3 implements KafkaConsumerRunner.RecordHandler{
 
     @Override
     public void process(ConsumerRecord<String, String> record) {

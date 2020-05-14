@@ -11,13 +11,12 @@ import top.kispower.skill.kafka2.annotation.KafkaConsumer;
  */
 @Slf4j
 @Component
-@KafkaConsumer(groupId = "group2", topicList = {"test2"}, consumerThreadNum = 2)
-public class TestConsumer2 implements KafkaConsumerRunner.RecordHandler{
+@KafkaConsumer(groupId = "group1", topicList = {"test"}, consumerThreadNum = 2)
+public class TestConsumer implements KafkaConsumerRunner.RecordHandler{
 
     @Override
     public void process(ConsumerRecord<String, String> record) {
         log.info("{}", record);
     }
-
 
 }
