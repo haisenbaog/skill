@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Component;
 import top.kispower.skill.kafka2.annotation.KafkaConsumer;
+import top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner;
 
 /**
  * @author haisenbao

@@ -1,4 +1,4 @@
-package top.kispower.skill.kafka2.consumer;
+package top.kispower.skill.kafka2.consumer.runable;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -130,7 +130,7 @@ public class KafkaConsumerRunner implements Runnable {
             try {
                 process(record);
             } catch (Exception e) {
-                log.error("top.kispower.skill.kafka2.consumer.KafkaConsumerRunner.RecordHandler.process failed, record={}", record, e);
+                log.error("top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner.RecordHandler.process failed, record={}", record, e);
             }
         }
 

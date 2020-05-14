@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import top.kispower.skill.kafka2.annotation.KafkaConsumer;
 import top.kispower.skill.kafka2.config.KafkaConsumerConfig;
-import top.kispower.skill.kafka2.consumer.KafkaConsumerRunner;
+import top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
