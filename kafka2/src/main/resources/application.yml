@@ -9,6 +9,8 @@ kafka:
     keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
     valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
     enableAutoCommit: false
+    sessionTimeoutMs: 25000
+    maxPollRecords: 30
     groupId: group3
     testTopic: test3
     testTopicConsumerThreadNum: 3

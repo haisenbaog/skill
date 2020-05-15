@@ -71,6 +71,8 @@ public class KafkaConsumerRegisterListener implements ApplicationContextAware, A
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaConsumerConfig.getKeyDeserializer());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaConsumerConfig.getValueDeserializer());
         props.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, kafkaConsumerConfig.getEnableAutoCommit());
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, kafkaConsumerConfig.getSessionTimeoutMs());
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, kafkaConsumerConfig.getMaxPollRecords());
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         for (int i = 0; i < consumerThreadNum; i++) {
