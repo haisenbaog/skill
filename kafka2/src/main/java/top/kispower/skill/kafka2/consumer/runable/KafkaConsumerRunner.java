@@ -20,7 +20,7 @@ public class KafkaConsumerRunner implements Runnable {
     /**
      * kafka消费者
      */
-    private final KafkaConsumer kafkaConsumer;
+    private final KafkaConsumer<String, String> kafkaConsumer;
 
     /**
      * 订阅的topic
@@ -58,7 +58,7 @@ public class KafkaConsumerRunner implements Runnable {
     private ConsumerRebalanceListener consumerRebalanceListener;
 
     public KafkaConsumerRunner(Properties properties, List<String> topicList, RecordHandler recordHandler) {
-        this.kafkaConsumer = new KafkaConsumer(properties);
+        this.kafkaConsumer = new KafkaConsumer<>(properties);
         this.topicList = topicList;
         this.recordHandler = recordHandler;
         this.consumerRebalanceListener = new CommitOffsetRebalanceListener(kafkaConsumer);
