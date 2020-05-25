@@ -4,6 +4,7 @@ kafka:
     keySerializer: org.apache.kafka.common.serialization.StringSerializer
     valueSerializer: org.apache.kafka.common.serialization.StringSerializer
     acks: all
+    maxBlockMs: 30000
   consumer:
     bootstrapServers: 101.132.110.204:9092
     keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -11,6 +12,7 @@ kafka:
     enableAutoCommit: false
     sessionTimeoutMs: 25000
     maxPollRecords: 30
+
     groupId: group3
     testTopic: test3
     testTopicConsumerThreadNum: 3

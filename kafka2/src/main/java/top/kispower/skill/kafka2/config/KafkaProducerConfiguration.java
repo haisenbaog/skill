@@ -28,6 +28,9 @@ public class KafkaProducerConfiguration {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProducerConfig.getKeySerializer());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProducerConfig.getValueSerializer());
         props.put(ProducerConfig.ACKS_CONFIG, kafkaProducerConfig.getAcks());
+
+        props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, kafkaProducerConfig.getMaxBlockMs());
+
         log.info("KafkaProducer building... properties={}", props);
         return new KafkaProducer<>(props);
     }
