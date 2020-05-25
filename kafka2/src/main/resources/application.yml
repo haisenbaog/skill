@@ -13,7 +13,7 @@ kafka:
     sessionTimeoutMs: 25000
     maxPollRecords: 30
 
-    groupId: group3
-    testTopic: test3
-    testTopicConsumerThreadNum: 3
+#    groupId: group3
+#    testTopic: test3
+#    testTopicConsumerThreadNum: 3
 
