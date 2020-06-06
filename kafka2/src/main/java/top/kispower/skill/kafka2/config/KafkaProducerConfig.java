@@ -20,5 +20,7 @@ public class KafkaProducerConfig {
     private String valueSerializer;
 
     private String acks;
+
+    private Long maxBlockMs;
 }
 

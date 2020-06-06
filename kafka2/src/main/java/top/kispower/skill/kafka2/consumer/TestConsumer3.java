@@ -12,7 +12,7 @@ import top.kispower.skill.kafka2.consumer.runable.KafkaConsumerRunner;
  */
 @Slf4j
 @Component
-@KafkaConsumer(groupId = "group3", topicList = {"test3"}, consumerThreadNum = 2)
+//@KafkaConsumer(groupId = "group3", topicList = {"test3"}, consumerThreadNum = 2)
 public class TestConsumer3 implements KafkaConsumerRunner.RecordHandler{
 
     @Override
